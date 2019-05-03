@@ -66,8 +66,8 @@ const remainPercentage = 100 - passedP;
 const days = `
 Day #${day}<br/>
 remaining ${remainDays}<br/>
-year reamin ${remainPercentage}<br/>
-year passed ${passedP}<br/>`;
+year reamin ${remainPercentage}%<br/>
+year passed ${passedP}%<br/>`;
 
 const cDayMonth = new Date().getDate();
 
@@ -169,24 +169,25 @@ const PASSED_Q_P = Math.floor(day_of_q / 90);
 const res = `${days}
 day in month ${cDayMonth} <br />
 days in month ${cDaysInMonth} <br />
-month passed ${MONTH_P} <br />
-month remaining ${REMAIN_MONTH_P} <br />
+month passed ${MONTH_P}% <br />
+month remaining ${REMAIN_MONTH_P}% <br />
 number of week ${N_WEEK} <br />
 week remains ${R_WEEK} <br />
 total weeks ${T_WEEK} <br />
 season # ${season[0]} <br />
 season days passed ${SEASON_N} <br />
-season days remain ${SEASON_R} <br />
-season percent ${SEASON_P} <br />
-season remain percent ${SEASON_R_P} <br />
+season days remain ${SEASON_R}% <br />
+season ${SEASON_P}% <br />
+season remain ${SEASON_R_P}% <br />
 current Q ${Q_CURRENT} <br />
 remain Q days ${REMAIN_Q_DAYS} <br />
 passed Q days ${PASSED_Q_DAYS} <br />
-remain Q percent ${REMAIN_Q_P} <br />
-passed Q percent ${PASSED_Q_P}`;
+remain Q ${REMAIN_Q_P}% <br />
+passed Q ${PASSED_Q_P}%`;
 
 setContent(res, ".info");
 
+  
   
 </script>
 </body>
