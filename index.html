@@ -4,29 +4,190 @@
 <title>Time Now in Percentage</title>
 </head>
 <body>
-<div class="root"></div>
+  
+ <div class="root"></div>
+<br />
+<br />
+<div class="info"></div> 
+  
 <style>
 .root {
   font-size: 60px;
   font-family: sans-serif;
   font-weight: bold;
 }
+
+.info {
+  font-size: 30px;
+  font-family: sans-serif;
+  font-weight: bold;
+  word-break: break;
+  width: 700px;
+}
 </style>
 <script>
 
+const setContent = (c, sel = ".root") =>
+  (document.querySelector(sel).innerHTML = c);
 
-setContent = (c) => document.querySelector('.root').innerHTML = c
+const h = new Date().getHours();
+const mi = new Date().getMinutes() / 60;
 
+const passedValue = Math.floor(((h + mi) * 100) / 24);
 
-h = new Date().getHours()
-mi = new Date().getMinutes() / 60
+const remain = " remain " + (100 - passedValue) + "%";
+const passed = passedValue + "%";
 
-passedValue = Math.floor((h + mi) * 100 / 24)
+setContent(`${passed} ${remain}`);
 
-const remain = ' remain ' + (100 - passedValue) + '%'
-const passed = passedValue + '%'
+const now = new Date();
+const start = new Date(now.getFullYear(), 0, 0);
+const diff =
+  now -
+  start +
+  (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+const oneDay = 1000 * 60 * 60 * 24;
+const day = Math.floor(diff / oneDay);
+console.log("Day of year: " + day);
 
-setContent(`${passed} ${remain}`)
+let days_of_a_year = function(year) {
+  let sum = 0;
+  for (let x = 0; x < 12; x++) {
+    sum += new Date(year, x, 0).getDate();
+  }
+  return sum;
+};
+
+const totalDays = days_of_a_year(new Date().getFullYear());
+
+const remainDays = totalDays - day;
+const passedP = Math.floor((day / totalDays) * 100);
+const remainPercentage = 100 - passedP;
+const days = `
+Day #${day}<br/>
+remaining ${remainDays}<br/>
+year reamin ${remainPercentage}<br/>
+year passed ${passedP}<br/>`;
+
+const cDayMonth = new Date().getDate();
+
+function daysInMonth(month, year) {
+  return new Date(year, month, 0).getDate();
+}
+
+const cDaysInMonth = daysInMonth(
+  new Date().getMonth(),
+  new Date().getFullYear()
+);
+
+const MONTH_P = Math.floor((cDayMonth / cDaysInMonth ) * 100);
+const REMAIN_MONTH_P = 100 - MONTH_P;
+
+const onejan = new Date(now.getFullYear(), 0, 1);
+const week = Math.ceil(((now - onejan) / 86400000 + onejan.getDay() + 1) / 7);
+
+const WEEK_P = Math.floor(week / 52);
+const WEEK_P_R = 100 - WEEK_P;
+const T_WEEK = 52;
+const N_WEEK = week;
+const R_WEEK = T_WEEK - N_WEEK;
+// X month % remain passed
+// X month D remain passed
+// X week % remain passed
+// X week D remain passed
+
+// spring_start = winter_end = 60
+// spring_end = summer_start = 150
+// summer_end = autumn_start = 240
+// autumn_end = winter_start = 330
+function getSeason() {
+  const d = day;
+  if (d >= 330) {
+     return [0, 330, 365]
+  }
+  if (d >= 240) {
+    return [3, 240, 330];    
+  }
+    if (d >= 150) {
+    return [2, 150, 240];
+  }
+
+   if (d >= 60) {
+    return [1, 60, 150];
+   }
+      return [0, 0, 60];
+    
+}
+
+const season = getSeason();
+
+function getSeasonDay() {
+  const [season, start, end] = getSeason();
+  const d = day;
+  return d - start;
+}
+
+// season days passed =
+const SEASON_N = getSeasonDay();
+const SEASON_P = Math.floor(100 * (SEASON_N / 90));
+const SEASON_R = 90 - getSeasonDay();
+const SEASON_R_P = Math.floor(100 * (SEASON_R / 90));
+
+// X season % remain passed
+// X season D remain passed
+
+// X quarters % remaind passed, current Q
+//January, February, and March (Q1)
+// April, May, and June (Q2)
+// July, August, and September (Q3)
+// October, November, and December (Q4)
+
+function quarter_of_the_year(data) {
+  let q;
+  let m = data.getMonth();
+  if (m <= 3) q = 1;
+  else if (m > 3 && m <= 6) q = 2;
+  else if (m > 6 && m <= 9) q = 3;
+  else if (m > 9 && m <= 12) q = 4;
+
+  return q;
+}
+
+const Q_CURRENT = quarter_of_the_year(new Date());
+
+const quarter = Math.floor(now.getMonth() / 3);
+const firstDate = new Date(now.getFullYear(), quarter * 3, 1);
+
+const day_of_q = new Date().getDate() - firstDate.getDate();
+
+const REMAIN_Q_DAYS = 90 - day_of_q;
+const PASSED_Q_DAYS = day_of_q;
+
+const REMAIN_Q_P = Math.floor(100 - day_of_q / 90);
+const PASSED_Q_P = Math.floor(day_of_q / 90);
+
+const res = `${days}
+day in month ${cDayMonth} <br />
+days in month ${cDaysInMonth} <br />
+month passed ${MONTH_P} <br />
+month remaining ${REMAIN_MONTH_P} <br />
+number of week ${N_WEEK} <br />
+week remains ${R_WEEK} <br />
+total weeks ${T_WEEK} <br />
+season # ${season[0]} <br />
+season days passed ${SEASON_N} <br />
+season days remain ${SEASON_R} <br />
+season percent ${SEASON_P} <br />
+season remain percent ${SEASON_R_P} <br />
+current Q ${Q_CURRENT} <br />
+remain Q days ${REMAIN_Q_DAYS} <br />
+passed Q days ${PASSED_Q_DAYS} <br />
+remain Q percent ${REMAIN_Q_P} <br />
+passed Q percent ${PASSED_Q_P}`;
+
+setContent(res, ".info");
+
+  
 </script>
 </body>
 </html>
