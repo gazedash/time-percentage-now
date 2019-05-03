@@ -1,0 +1,32 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time Now in Percentage</title>
+</head>
+<body>
+<div class="root"></div>
+<style>
+.root {
+  font-size: 60px;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+</style>
+<script>
+
+
+setContent = (c) => document.querySelector('.root').innerHTML = c
+
+
+h = new Date().getHours()
+mi = new Date().getMinutes() / 60
+
+passedValue = Math.floor((h + mi) * 100 / 24)
+
+const remain = ' remain ' + (100 - passedValue) + '%'
+const passed = passedValue + '%'
+
+setContent(`${passed} ${remain}`)
+</script>
+</body>
+</html>
